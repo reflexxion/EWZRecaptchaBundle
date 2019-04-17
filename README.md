@@ -110,6 +110,17 @@ ewz_recaptcha:
     verify_host: true
 ```
 
+To disable the remoteip validation add the ``verify_ip`` option:
+
+``` yaml
+# app/config/config.yml
+
+ewz_recaptcha:
+    // ...
+    verify_ip: false
+```
+
+
 Congratulations! You're ready!
 
 ## Basic Usage

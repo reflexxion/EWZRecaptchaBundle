@@ -85,6 +85,7 @@ class IsTrueValidator extends ConstraintValidator
      * @param AuthorizationCheckerInterface|null $authorizationChecker
      * @param array                              $trustedRoles
      * @param string                             $apiHost
+     * @param bool                               $verifyIp
      * @param int|null                           $timeout
      */
     public function __construct(
@@ -96,6 +97,7 @@ class IsTrueValidator extends ConstraintValidator
         AuthorizationCheckerInterface $authorizationChecker = null,
         array $trustedRoles = array(),
         $apiHost = 'www.google.com',
+        $verifyIp = true,
         $timeout = null)
     {
         $this->enabled = $enabled;
@@ -106,6 +108,7 @@ class IsTrueValidator extends ConstraintValidator
         $this->authorizationChecker = $authorizationChecker;
         $this->trustedRoles = $trustedRoles;
         $this->recaptchaVerifyServer = 'https://'.$apiHost;
+        $this->verifyIp = $verifyIp;
         $this->timeout = $timeout;
     }
 
@@ -128,7 +131,7 @@ class IsTrueValidator extends ConstraintValidator
 
         // define variable for recaptcha check answer
         $masterRequest = $this->requestStack->getMasterRequest();
-        $remoteip = $masterRequest->getClientIp();
+        $remoteip = $this->verifyIp ? $masterRequest->getClientIp() : null;
         $answer = $masterRequest->get('g-recaptcha-response');
 
         // Verify user response with Google
